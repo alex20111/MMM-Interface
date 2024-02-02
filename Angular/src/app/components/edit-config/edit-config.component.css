@@ -1,0 +1,60 @@
+:host ::ng-deep json-editor,
+:host ::ng-deep json-editor .jsoneditor,
+:host ::ng-deep json-editor > div,
+:host ::ng-deep json-editor jsoneditor-outer {
+  height: 80vh;
+}
+
+.editor {
+  
+  gap: 10px;
+  font-family: monospace;
+  line-height: 21px;
+  /* background: #282a3a; */
+  background: #ffffff;
+  border-radius: 2px;
+  
+  width:90%;
+}
+
+textarea {
+  line-height: 21px;
+  overflow-y: hidden;
+  padding: 0;
+  border: 0;
+  /* background: #282a3a; */
+  /* color: #FFF; */
+  /* min-width: 500px; */
+  outline: none;
+  resize: none;
+  width: 250px;
+}
+
+.line-numbers {
+  width: 25px;
+  text-align: right;
+}
+
+.line-numbers span {
+  counter-increment: linenumber;
+}
+
+.line-numbers span::before {
+  content: counter(linenumber);
+  display: block;
+  /* color: #506882; */
+  color: #999fa7;
+}
+
+textarea {
+  white-space: pre;
+  overflow-wrap: normal;
+  overflow-x: scroll;
+}
+
+.toolbar-btn{
+  margin-right:8px;
+  margin-bottom:10px;
+  height: 35px;
+  width: 35px;
+}

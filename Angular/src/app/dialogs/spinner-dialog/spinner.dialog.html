@@ -1,0 +1,24 @@
+<!-- <h1 mat-dialog-title> Refreshing </h1> -->
+<div style="margin-top:20px; margin-left:20px; padding-bottom:20px;font-size: 30px;"  >
+  <span *ngIf="!showResult && !error">Please wait ... </span>
+ 
+</div>
+  <div mat-dialog-content class="center" style="margin-top:20px;">
+    <mat-spinner *ngIf="!showResult && !error"></mat-spinner> 
+    <mat-icon *ngIf="showResult && !error" style="color:green;height:64px;width:64px;font-size: 64px">task_alt</mat-icon>   
+    <mat-icon *ngIf="showResult && error" style="color:darkred;height:64px;width:64px;font-size: 64px">error</mat-icon>  
+  </div>
+
+  <div style="margin-top:20px; padding: 0px 10px 20px 10px;font-size: 25px;line-height: 30px;"  class="center">    
+{{data.message}}
+  </div>
+  
+  <div *ngIf="showResult" mat-dialog-actions style="flex-direction: column;"> 
+
+   <div *ngIf="!error" class="center" style="margin-bottom: 10px"> <mat-icon style="color:green;margin-right:8px">task_alt</mat-icon> {{data.header}} completed </div>
+   <div *ngIf="error" class="center" style="margin-bottom: 10px"> <mat-icon style="color:darkred;margin-right:8px">error</mat-icon> {{data.header}} error </div>
+   
+    <!-- <button mat-button (click)="onCancel()">No</button>  -->
+    <button mat-button (click)="btnOk()"  color="primary" 
+               cdkFocusInitial>Ok</button> 
+  </div> 

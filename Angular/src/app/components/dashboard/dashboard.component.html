@@ -1,0 +1,141 @@
+<label *ngIf="message">
+    <input type="checkbox" class="alertCheckbox" autocomplete="off" />
+    <div class="alert {{messageType}}">
+      <span class="alertClose">X</span>
+      <span class="alertText"> {{message}}
+        <br class="clear" /></span>
+    </div>
+  </label>
+
+
+<div style="display: flex; ">
+    <mat-card class="card" style="width: 400px;" >
+        <mat-card-header style="align-items: center;    justify-content: center;">
+            <mat-card-title>System</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>        
+                <span><Strong>Platform:</Strong> <span style="float: right;">{{dashBoardInfo.platform}}</span></span> <br/>
+                <span><Strong>Host Name:</Strong> <span style="float: right;">{{dashBoardInfo.hostName}}</span></span> <br/>
+                <span><Strong>Up Time:</Strong> <span style="float: right;">{{dashBoardInfo.uptime}}</span></span>          
+            
+        </mat-card-content>
+    
+    </mat-card>
+    <mat-card class="card" style="width: 400px;" >
+        <mat-card-header style="align-items: center;    justify-content: center;">
+            <mat-card-title>Software</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>      
+                 <span><Strong>Magic Mirror version:</Strong> <span style="float: right;">{{dashBoardInfo.mmVersion}}</span></span><br/>        
+                <span><Strong>NPM version:</Strong> <span style="float: right;">{{dashBoardInfo.npmVersion}}</span></span><br/>
+                <span><Strong>Node version:</Strong> <span style="float: right;">{{dashBoardInfo.nodeVersion}}</span></span>
+                                
+        </mat-card-content>
+    
+    </mat-card>
+    
+    </div>
+
+
+
+<div  style="display: flex">
+
+    <mat-card class="card">
+        <mat-card-header>
+            <mat-card-title>CPU stats</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <div>
+                <ngx-gauge type="arch" thick="15" [value]="dashBoardInfo.sysLoad" cap="butt" label="System load" append="%"
+                    [thresholds]="tresh" style="line-height:normal;" size="250"></ngx-gauge>
+            </div>
+            <div class="flex-row">
+                <div class="temp">
+                    <span style="font-size: 12px;">Cpu Core</span>
+                    <span style="justify-content: center; display:flex">{{dashBoardInfo.cpuCore}}
+                    </span>
+
+                </div>
+                <div class="temp">
+                    <span style="font-size: 12px;">Temperature</span>
+                    <span style="justify-content: center; display:flex">{{dashBoardInfo.cpuTemp}}C
+                    </span>
+                </div>
+            </div>
+            <div class="flex-row">
+                <div class="temp">
+                    <span style="font-size: 12px;">Frequency</span>
+                    <span style="justify-content: center; display:flex">{{dashBoardInfo.freq}}Mhz
+                    </span>
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+
+    <mat-card class="card">
+        <mat-card-header>
+            <mat-card-title>Memory stats</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <div>
+                <ngx-gauge type="arch" thick="15" [value]="dashBoardInfo.memUsed" cap="butt" label="Memory Used" append="%"
+                    [thresholds]="tresh" style="line-height:normal;" size="250">
+                </ngx-gauge>
+            </div>
+            <div class="flex-row">
+                <div class="temp">
+                    <span style="font-size: 12px;">Available</span>
+                    <span style="justify-content: center; display:flex">{{this.dashBoardInfo.memAvai}}
+                    </span>
+                </div>
+                <div class="temp">
+                    <span style="font-size: 12px;">Free</span>
+                    <span style="justify-content: center; display:flex">{{dashBoardInfo.memFree}}
+                    </span>
+                </div>
+            </div>
+            <div class="flex-row">
+                <div class="temp">
+                    <span style="font-size: 12px;">total</span>
+                    <span style="justify-content: center; display:flex">{{dashBoardInfo.memTotal}}
+                    </span>
+                </div>
+            </div>
+        </mat-card-content>
+      </mat-card>
+
+    <mat-card class="card">
+        <mat-card-header>
+            <mat-card-title>Disk stats</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <div>
+                <ngx-gauge type="arch" thick="15" [value]="dashBoardInfo.diskUsedPerc" cap="butt" label="Disk Utilisation" append="%" [thresholds]="tresh"
+                style="line-height:normal;" size="250">
+            </ngx-gauge>
+            </div>
+            <div class="flex-row">
+                <div class="temp">
+                    <span style="font-size: 12px;">Used</span>
+                    <span style="justify-content: center; display:flex">{{dashBoardInfo.diskUsed}}
+                    </span>
+                </div>
+                <div class="temp">
+                    <span style="font-size: 12px;">Available</span>
+                    <span style="justify-content: center; display:flex">{{dashBoardInfo.diskAvai}}
+                    </span>
+                </div>
+              
+            </div>
+            <div class="flex-row">
+                <div class="temp">
+                    <span style="font-size: 12px;">total</span>
+                    <span style="justify-content: center; display:flex">{{dashBoardInfo.diskTotal}}
+                    </span>
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+
+</div>
+

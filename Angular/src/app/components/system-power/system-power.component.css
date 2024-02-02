@@ -1,0 +1,16 @@
+.example-card {
+    max-width: 200px;
+  }
+  
+
+  .mat-icon {
+    transform: scale(1.5);
+ }
+
+ .small{
+  transform: scale(1);
+ }
+
+ .inline-block {
+    display: inline-block;
+  }

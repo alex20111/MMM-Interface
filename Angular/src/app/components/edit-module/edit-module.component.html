@@ -1,0 +1,205 @@
+
+<div class="basic-container">
+
+  <mat-spinner *ngIf="!module" color="primary"></mat-spinner>
+
+  <label *ngIf="message">
+    <input type="checkbox" class="alertCheckbox" autocomplete="off" />
+    <div class="alert {{messageType}}">
+      <span class="alertClose">X</span>
+      <span class="alertText"> {{message}}
+        <br class="clear" /></span>
+    </div>
+  </label>
+  <button (click)="chk()">check</button>
+  <form [formGroup]="form" (ngSubmit)="send(form)" [ngStyle]="{'width': size550px ? '100%' : '800px'} "
+    style="margin-top:15px"  *ngIf="module" >
+
+    <mat-card>
+      <mat-card-title style="margin-left:10px;margin-top:15px">Module: {{module != null ? module.name : '' }}
+      </mat-card-title>
+
+      <mat-card-content>
+        <p>
+          <mat-checkbox formControlName="disabled">Disabled</mat-checkbox>
+        </p>
+        <p>
+          <mat-form-field *ngIf="form.get('position')">
+            <mat-label>Position</mat-label>
+            <mat-select formControlName="position">
+              <mat-option value="invisible">Invisible</mat-option>
+              <mat-option *ngFor="let position of positionList" [value]="position">
+                {{position}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field appearance="fill" style="width:96%" *ngIf="form.get('header')">
+            <mat-label>Header text</mat-label>
+            <input matInput placeholder="Header" formControlName="header">
+            <!-- <mat-icon matSuffix (click)="deleteInput('header',[])">clear</mat-icon> -->
+            <!-- <mat-icon matSuffix>sentiment_very_satisfied</mat-icon> -->
+            <mat-hint>Header text above the module</mat-hint>
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field style="width:80%" *ngIf="form.get('animIn')">
+            <mat-label>Animate In</mat-label>
+            <mat-select formControlName="animIn">
+              <mat-option *ngFor="let animate of animateArray" [value]="animate">
+                {{animate}}
+              </mat-option>
+            </mat-select>
+
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field style="width:80%" *ngIf="form.get('animOut')">
+            <mat-label>Animate out</mat-label>
+            <mat-select formControlName="animOut">
+              <mat-option *ngFor="let animate of animateArray" [value]="animate">
+                {{animate}}
+              </mat-option>
+            </mat-select>
+
+          </mat-form-field>
+        </p>
+        <mat-card>
+          <mat-card-title style="background-color: #3f51b5;padding-left: 10px;padding-top: 10px;padding-bottom: 10px;border-radius: 3px 3px 0px 0px;">Config </mat-card-title>
+          <mat-divider style="margin-bottom:8px"></mat-divider>
+          <div>
+            <div style="margin-left:10px;margin-top:10px">
+              <div *ngFor="let mainForm of form.controls | keyvalue">
+
+                <ng-container *ngIf="isFormGroupObj(mainForm);else array"><!-- any form group-->
+                  <ng-container *ngTemplateOutlet="groupTemplate; context: { formGroup: mainForm , form: form}">
+                    <p *ngFor="let f of dynFormMap.get('configFormObj')  | keyvalue">
+                      <mat-form-field style="width:96%">
+                        <mat-label>{{f.value}}</mat-label>
+                        <input matInput placeholder="Name" [formControlName]="f.value">
+
+                      </mat-form-field>
+                    </p>
+                  </ng-container>
+                </ng-container>
+                <ng-template #array>
+                  <ng-container *ngIf="isArray(mainForm)"> <!-- any form array-->
+                    array {{mainForm.key}} -- {{mainForm}} <br />
+                  </ng-container>
+                </ng-template>
+              </div>           
+            </div>
+
+            <ng-template #groupTemplate let-formGroup="formGroup" let-form="form">
+
+              <div [formGroup]="form">
+                <div [formGroupName]="formGroup.key">
+                  <div *ngFor="let subGroup of formGroup.value.controls | keyvalue">
+                    <div *ngIf="isArray(subGroup)">
+                      <div formGroupName="{{subGroup.key}}">
+                        <mat-card class="sub-card">
+                          <mat-card-title style="margin-left:10px">{{subGroup.key}} </mat-card-title>
+                          <mat-divider style="margin-bottom:8px"></mat-divider>
+                          <div *ngFor="let arrIdx of subGroup.value.controls | keyvalue; index as i ">
+
+                            <div *ngIf="isString(arrIdx.value)">
+                              <p>
+                                <mat-form-field style="width:96%">
+                                  <mat-label>{{arrIdx.key}}</mat-label>
+                                  <input matInput placeholder="Name" formControlName="{{arrIdx.key}}">
+                    
+                                </mat-form-field>
+                              </p>
+
+                            </div>
+                            <div *ngFor="let arrVar of arrIdx.value.controls | keyvalue">
+                              <div formGroupName="{{arrIdx.key}}">
+                                <ng-template [ngIf]="isFormGroupObj(arrVar)" [ngIfElse]="normalField">
+                                  <mat-card class="sub-card">
+                                    <mat-card-title style="margin-left:10px">{{arrVar.key}} </mat-card-title>
+                                    <mat-divider style="margin-bottom:8px"></mat-divider>
+                                    <ng-container
+                                      *ngTemplateOutlet="groupTemplate; context: { formGroup: arrVar, form: arrIdx.value }">
+                                    </ng-container>
+                                  </mat-card>
+                                </ng-template>
+                                <ng-template #normalField>
+                                  <ng-template [ngIf]="isBoolean(arrVar.value)" [ngIfElse]="subNormalfieldStringArr">
+                                    <p>
+                                      <mat-checkbox formControlName="{{arrVar.key}}">{{arrVar.key}}</mat-checkbox>
+                                    </p>
+                                  </ng-template>
+                                  <ng-template #subNormalfieldStringArr>
+                                    <p>
+                                    <p>
+                                      <mat-form-field style="width:96%">
+                                        <mat-label>{{arrVar.key}}</mat-label>
+                                        <input matInput placeholder="Name" formControlName="{{arrVar.key}}">
+                              
+                                      </mat-form-field>
+                                    </p>
+                                  </ng-template>
+                                </ng-template>
+                              </div>
+                            </div>
+                          </div>
+                        </mat-card>
+                      </div>
+                    </div>
+
+                    <div *ngIf="isFormGroupObj(subGroup)">
+                      <mat-card class="sub-card">
+                        <mat-card-title style="margin-left:10px">{{subGroup.key}} </mat-card-title>
+                        <mat-divider style="margin-bottom:8px"></mat-divider>
+                        <ng-container
+                          *ngTemplateOutlet="groupTemplate; context: { formGroup: subGroup, form: formGroup.value }">
+                        </ng-container>
+                      </mat-card>
+                    </div>
+                    <div *ngIf="!isArray(subGroup) && !isFormGroupObj(subGroup)">
+                      <ng-template [ngIf]="isBoolean(subGroup.value)" [ngIfElse]="subNormalfieldString">
+                        <p>
+                          <mat-checkbox formControlName="{{subGroup.key}}">{{subGroup.key}}</mat-checkbox>
+                        </p>
+                      </ng-template>
+                      <ng-template #subNormalfieldString>
+                        <p>
+                          <mat-form-field style="width:96%">
+                            <mat-label>{{subGroup.key}}</mat-label>
+                            <input matInput placeholder="Name" [formControlName]="subGroup.key">
+                                         </mat-form-field>
+                        </p>
+                      </ng-template>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </div>
+
+          <div id="configNewFields" ></div>
+          <mat-divider></mat-divider>
+          <mat-card-actions >
+            <mat-form-field style="width:200px;">
+              <mat-label>Add New entry</mat-label>
+              <input matInput placeholder="Entry name" type="text" [value]="keyValue" (input)="keyValue = $event.target.value;" />
+            
+              <button mat-mini-fab  matSuffix color="primary" matTooltip="Add new key" (click)="addValue('configNewFields')" type="button">
+                <mat-icon>add</mat-icon>
+              </button>              
+              <mat-hint *ngIf="keyInputError.length > 0" style="color:red">{{keyInputError}}</mat-hint>
+            </mat-form-field> 
+          </mat-card-actions>
+        </mat-card>
+        <button mat-raised-button color="primary" type="submit" style="margin-top: 10px"  [disabled]="saving || !(form.valid && form.dirty)">
+         <mat-icon *ngIf="saving" style="margin-left:4px">
+            <mat-spinner color="accent" diameter="18"> </mat-spinner>
+        </mat-icon>
+          Save
+        </button>
+      </mat-card-content>
+    </mat-card>
+  </form>
+</div>
+

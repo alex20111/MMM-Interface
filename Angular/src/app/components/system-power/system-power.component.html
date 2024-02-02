@@ -1,0 +1,70 @@
+<h2>Power/System</h2>
+<label *ngIf="message">
+  <input type="checkbox" class="alertCheckbox" autocomplete="off" />
+  <div class="alert error">
+    <span class="alertClose">X</span>
+    <span class="alertText"> {{message}}
+      <br class="clear" /></span>
+  </div>
+</label>
+  <mat-selection-list >
+    <mat-list-item  (click)="shutdown()">
+      <mat-icon matListItemIcon>power_settings_new</mat-icon>
+      <div matListItemTitle>Shutdown</div>
+      <div matListItemLine>{{shutdownMessage}}</div>
+    </mat-list-item>    
+
+    <mat-list-item (click)="restartPi()">
+      <mat-icon matListItemIcon>restart_alt</mat-icon>
+      <div matListItemTitle>Restart raspberry pi</div>
+      <div matListItemLine *ngIf="restartPiMessage">{{restartPiMessage}}</div> <!--minimised-->
+    </mat-list-item>
+
+    <mat-list-item (click)="restartMagicMirror()">
+      <mat-icon matListItemIcon>refresh</mat-icon>
+      <div matListItemTitle>Restart Magic Mirror 2</div>
+      <div matListItemLine *ngIf="restartMMMessage" [ngStyle]="{color:(restartMMMessage.indexOf('Error') != -1)?'red':'black'}">{{restartMMMessage}}</div>
+    </mat-list-item>
+
+    <mat-list-item (click)="refreshBrowser()">
+      <mat-icon matListItemIcon>autorenew</mat-icon>
+      <div matListItemTitle>Reload browser</div>
+      <div matListItemLine *ngIf="refresh">{{refresh}}</div>
+    </mat-list-item>
+
+    <mat-list-item (click)="toggleMonitor()">
+      <mat-icon matListItemIcon >desktop_windows</mat-icon> <!-- desktop_access_disabled-->
+      <div matListItemTitle>Monitor</div>
+        <div matListItemLine>
+          <mat-icon *ngIf="!monitorLoading && !monitorOn && monStatMsg.length > 0" class="small" matListItemIcon style="color:red;margin-top:10px">desktop_access_disabled</mat-icon>
+          <mat-icon *ngIf="!monitorLoading && monitorOn && monStatMsg.length == 0"class="small" matListItemIcon style="color:rgb(133, 201, 33)">desktop_windows</mat-icon>
+          <span style="color:red" *ngIf="monStatMsg.length > 0">{{monStatMsg}}</span>
+          <mat-spinner  style="display:inline-flex;margin-top:10px" *ngIf="monitorLoading" color="accent" diameter="25"> </mat-spinner>
+        </div>
+    </mat-list-item>
+
+    <mat-list-item   (click)="resizeScreen()">
+      <mat-icon matListItemIcon>fit_screen</mat-icon> <!-- desktop_access_disabled-->
+      <div matListItemTitle>Screen</div>
+        <div matListItemLine *ngIf="isFullScreen"> Full screen</div> <!--minimised-->
+        <div matListItemLine *ngIf="!isFullScreen">Minimised</div> 
+    </mat-list-item>
+
+    <!-- <mat-list-item >
+      <mat-icon matListItemIcon>screen_rotation</mat-icon> 
+      <div matListItemTitle>Rotate screen</div>
+        <div matListItemLine>Screen: 0</div> 
+    </mat-list-item> -->
+    <!-- <mat-list-item   (click)="devTools()"> -->
+      <!-- <mat-icon matListItemIcon>code</mat-icon>  -->
+      <!-- <div matListItemTitle>Open Magic Mirror DevTools</div> -->
+        <!-- <div matListItemLine>Screen: 0</div>  -->
+    <!-- </mat-list-item> -->
+        <!-- <mat-list-item  >
+      <mat-icon matListItemIcon>article</mat-icon> 
+      <div matListItemTitle>Logs</div>
+       
+    </mat-list-item> -->
+    
+  </mat-selection-list>
+  

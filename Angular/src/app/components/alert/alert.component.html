@@ -1,0 +1,44 @@
+<h2>Alert</h2>
+<label *ngIf="message">
+    <input type="checkbox" class="alertCheckbox" autocomplete="off" />
+    <div class="alert error">
+        <span class="alertClose">X</span>
+        <span class="alertText"> {{message}}
+            <br class="clear" /></span>
+    </div>
+</label>
+<form [formGroup]="form" (ngSubmit)="saveDetails()">
+    <p>
+        <mat-form-field>
+            <mat-label>Alert Title</mat-label>
+            <input matInput #input maxlength="100" placeholder="title" formControlName="alertTitle">
+            <mat-error>Title is required</mat-error>
+            <!-- <mat-hint align="end">{{input.value.length}}/10</mat-hint> -->
+        </mat-form-field>
+    </p>
+    <p>
+        <mat-form-field>
+            <mat-label>Alert type</mat-label>
+            <mat-select formControlName="alertType">
+                <mat-option value="alert">Alert</mat-option>
+                <mat-option value="notification">Notification</mat-option>
+            </mat-select>
+            <!-- <mat-hint align="end">Here's the dropdown arrow ^</mat-hint> -->
+        </mat-form-field>
+    </p>
+    <p>
+        <mat-form-field>
+            <mat-label>Alert description</mat-label>
+            <textarea matInput formControlName="alertDescription" cdkTextareaAutosize cdkAutosizeMinRows="5"
+                cdkAutosizeMaxRows="10"></textarea>
+        </mat-form-field>
+    </p>
+    <p>
+        <mat-form-field>
+            <mat-label>Alert timer</mat-label>
+            <input matInput formControlName="alertTimeToLive" placeholder="seconds">
+            <mat-hint align="end">In seconds</mat-hint> 
+        </mat-form-field>
+    </p>
+    <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid">Send</button>
+</form>

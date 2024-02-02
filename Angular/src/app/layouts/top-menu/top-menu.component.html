@@ -1,0 +1,27 @@
+
+    <mat-toolbar color="primary">
+     <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon" (click)="toggleSideMenu()">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span routerLink="/" style="cursor:pointer">Magic Mirror</span>
+    <span class="spacer"></span>
+    <button mat-icon-button class=" favorite-icon" matTooltip="Add 3rd pary module"  routerLink="/packageList" >
+      <mat-icon>view_module</mat-icon>
+    </button>
+    <button mat-button [matMenuTriggerFor]="beforeMenu"><mat-icon>palette</mat-icon></button>
+    <mat-menu #beforeMenu="matMenu" xPosition="before">
+
+      <mat-radio-group aria-label="Select an option" class="example-radio-group"  (change)="selectedValue($event)">
+        <mat-radio-button *ngFor="let o of theme; let i = index" [value]="o.value" [checked]="o.checked"> {{o.name}}</mat-radio-button>
+        </mat-radio-group>
+
+
+    
+    </mat-menu>
+    <button mat-icon-button class="example-icon" >
+     <mat-icon>settings</mat-icon>
+   </button>
+
+
+
+  </mat-toolbar>

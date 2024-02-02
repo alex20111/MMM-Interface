@@ -1,0 +1,92 @@
+<h2>Edit config</h2>
+<label *ngIf="message">
+    <input type="checkbox" class="alertCheckbox" autocomplete="off" />
+    <div class="alert error">
+        <span class="alertClose">X</span>
+        <span class="alertText"> {{message}}
+            <br class="clear" /></span>
+    </div>
+</label>
+<label *ngIf="validateMessage">
+    <input type="checkbox" class="alertCheckbox" autocomplete="off" />
+    <div class="alert " [ngClass]="validateType">
+        <span class="alertClose">X</span>
+        <span class="alertText"> {{validateMessage}}
+            <br class="clear" /></span>
+    </div>
+</label>
+
+<mat-selection-list *ngIf="configFileName.length == 0 && fileName.length == 0 ">
+    <mat-spinner *ngIf="loading"></mat-spinner>
+    <div mat-subheader>Config files</div>
+    <mat-list-item *ngFor="let file of configFileList" (click)="editConfigFile(file.name)">
+        <mat-icon matListItemIcon>mode_edit</mat-icon>
+        <div matListItemTitle>{{file.name}}</div>
+        <div matListItemLine>{{file.dateModified | date:"MMM dd, yyyy ',' HH:mm.ss" }}</div>
+    </mat-list-item>
+
+</mat-selection-list>
+
+<form *ngIf="configFileName.length > 0" [formGroup]="form" (submit)="submit('save')">
+    <button mat-mini-fab matTooltip="Back" color="primary" class="toolbar-btn" (click)="returnBack($event)"
+        [disabled]="loading">
+        <mat-icon *ngIf="loading" style="margin-left:4px;margin-top:3px;">
+            <mat-spinner color="accent" diameter="20"> </mat-spinner>
+        </mat-icon>
+        <mat-icon *ngIf="!loading">arrow_left</mat-icon>
+    </button>
+    <button mat-mini-fab matTooltip="Save" color="primary" class="toolbar-btn"
+        [disabled]="loading || !(form.valid && form.dirty)">
+        <mat-icon *ngIf="loading" style="margin-left:4px;margin-top:3px;">
+            <mat-spinner color="accent" diameter="20"> </mat-spinner>
+        </mat-icon>
+        <mat-icon *ngIf="!loading" style="transform: scale(0.9);">save</mat-icon>
+    </button>
+    <button type="button" mat-mini-fab matTooltip="Refresh" color="primary" class="toolbar-btn" *ngIf="displayRefresh"
+        (click)="refreshBrowser()">
+        <mat-icon style="transform: scale(0.9);">refresh</mat-icon>
+    </button>
+    <json-editor #editor [options]="editorOptions" formControlName="myinput">
+    </json-editor>
+
+</form>
+
+
+<form [formGroup]="form" (submit)="submit('save')" *ngIf="fileName.length > 0">
+    <p>{{configFileName}}</p>
+    <div class="editor">
+        <mat-toolbar style="margin-bottom:12px; min-height:40px; max-height:44px;background-color:rgb(102, 101, 101)">
+            <mat-toolbar-row>
+                <button mat-mini-fab matTooltip="Primary" matTooltip="Back" color="primary" class="toolbar-btn"
+                    (click)="returnBack($event)" [disabled]="loading">
+                    <mat-icon *ngIf="loading" style="margin-left:4px;margin-top:3px;">
+                        <mat-spinner color="accent" diameter="20"> </mat-spinner>
+                    </mat-icon>
+                    <mat-icon *ngIf="!loading">arrow_left</mat-icon>
+                </button>
+                <button mat-mini-fab matTooltip="Primary" matTooltip="Validate" color="primary" class="toolbar-btn"
+                    (click)="submit('validate')" type="button" [disabled]="loading">
+                    <mat-icon *ngIf="loading" style="margin-left:4px;margin-top:3px;">
+                        <mat-spinner color="accent" diameter="20"> </mat-spinner>
+                    </mat-icon>
+                    <mat-icon *ngIf="!loading">fact_check</mat-icon>
+                </button>
+                <button mat-mini-fab matTooltip="Primary" matTooltip="Save" color="primary" class="toolbar-btn"
+                    [disabled]="loading">
+                    <mat-icon *ngIf="loading" style="margin-left:4px;margin-top:3px;">
+                        <mat-spinner color="accent" diameter="20"> </mat-spinner>
+                    </mat-icon>
+                    <mat-icon *ngIf="!loading" style="transform: scale(0.9);">save</mat-icon>
+                </button>
+            </mat-toolbar-row>
+        </mat-toolbar>
+
+        <div style="display: inline-flex;padding: 1px 10px;width:100%">
+            <div class="line-numbers">
+                <span *ngFor="let n of numSequence(textRows);   let i = index;"></span>
+            </div>
+            <textarea style="width:100%" formControlName="myinput"></textarea>
+        </div>
+    </div>
+
+</form>

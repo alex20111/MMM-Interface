@@ -1,0 +1,35 @@
+.icon-display {
+    transform: scale(3);
+ }
+
+ .example-action-buttons {
+    padding-bottom: 20px;
+  }
+  
+  .example-headers-align .mat-expansion-panel-header-description {
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .example-headers-align .mat-mdc-form-field + .mat-mdc-form-field {
+    margin-left: 8px;
+  }
+
+
+  .view-menu {
+    display:flex;
+    flex-wrap:nowrap;
+    align-items:center; /* vertical align */
+  }
+  
+  .view-menu-buttons {
+    flex-grow:1;       /* take up rest of line */
+    text-align:center; /* centre text in p */
+    margin-bottom: 10px;
+  }
+
+  .spinner-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }

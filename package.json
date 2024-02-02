@@ -1,0 +1,34 @@
+{
+  "name": "Magic-Mirror-Module-Interface",
+  "version": "1.0.0",
+  "description": "This module manage your Magic mirror in a web interface",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alex20111/MMM-Interface.git"
+  },
+  "keywords": [
+    "magic mirror",
+    "smart mirror",
+    "module",
+    "Angular",
+    "control"
+  ],
+  "author": "Alexandre Boudreault",
+  "contributors": [
+    "https://github.com/jopyth/MMM-Remote-Control/graphs/contributors"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "git+https://github.com/alex20111/MMM-Interface/issues"
+  },
+  "homepage": "git+https://github.com/alex20111/MMM-Interface#readme",
+  "dependencies": {
+    "body-parser": "latest",
+    "lodash": "latest",
+    "node-fetch": "^2.7.0",
+    "simple-git": "latest",
+    "systeminformation": "^5.21.22",
+    "tabletojson": "latest",
+    "x-ray": "latest"
+  }
+}

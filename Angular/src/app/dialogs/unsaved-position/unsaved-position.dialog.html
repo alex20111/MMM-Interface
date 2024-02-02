@@ -1,0 +1,10 @@
+<h1 mat-dialog-title>Looks like the positions for the modules were changed but not saved. <br/>
+                     If you leave the current configuration will be lost.</h1>
+  <div mat-dialog-content>
+    <p>Leave? </p>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-stroked-button color="warn" (click)="cancel()">No</button>
+    <button mat-stroked-button color="primary" (click)="save()" cdkFocusInitial>Yes</button>
+  </div>
+

@@ -1,0 +1,78 @@
+
+<h1 style="margin-top:10px">3rd party modules</h1>
+<mat-spinner *ngIf="!dataSource && loading" color="primary"></mat-spinner>
+
+<label *ngIf="message">
+  <input type="checkbox" class="alertCheckbox" autocomplete="off" />
+  <div class="alert {{messageType}}">
+    <span class="alertClose">X</span>
+    <span class="alertText"> {{message}}
+      <br class="clear" /></span>
+  </div>
+</label>
+
+<div *ngIf="dataSource">
+<p style="max-width: 500px">
+    <mat-form-field >
+      <mat-label>Categories</mat-label>
+      <mat-select  [(value)]="selectedCategory"  (selectionChange)="onChangeCat($event)"> 
+        <mat-option value="All">All</mat-option> 
+        <mat-option *ngFor="let category of categories" [value]="category">
+          {{category}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </p>
+
+<!-- <button (click)="display()">click</button> -->
+<mat-form-field style="max-width: 500px">
+    <mat-label>Search</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Search for module" #input> 
+  </mat-form-field>
+  <p>
+    <mat-checkbox (change)="checkCheckBoxvalue($event)" [checked]="checked">All app installed</mat-checkbox> 
+  </p>
+  
+  <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource">
+  
+      <!-- ID Column -->
+      <ng-container matColumnDef="Title">
+        <th mat-header-cell *matHeaderCellDef > Title </th>
+        <td mat-cell *matCellDef="let row"> <div [innerHTML]="row.Title | safeHtml" ></div>  </td>
+      </ng-container>
+  
+      <!-- Progress Column -->
+      <ng-container matColumnDef="Author">
+        <th mat-header-cell *matHeaderCellDef > Author </th>
+        <td mat-cell *matCellDef="let row"> <div [innerHTML]="row.Author" ></div></td>
+      </ng-container>
+  
+      <!-- Name Column -->
+      <ng-container matColumnDef="Description">
+        <th mat-header-cell *matHeaderCellDef > Description  </th>
+        <td mat-cell *matCellDef="let row"> <div [innerHTML]="row.Description" ></div> </td>
+      </ng-container>
+  
+       <ng-container matColumnDef="Actions">
+        <th mat-header-cell *matHeaderCellDef  >Actions</th>
+        <td mat-cell *matCellDef="let row; let i = index">
+          <span *ngIf="row.installed"> App Installed </span>
+          <button *ngIf="!row.installed" mat-stroked-button color="primary" (click)="addModule(row, i)">Install</button>
+        </td>
+      </ng-container>
+
+  
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  
+      <!-- Row shown when there is no matching data. -->
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+      </tr>
+    </table>
+  
+    <mat-paginator [pageSizeOptions]="[30, 60, 100]" ></mat-paginator>
+  </div>
+  
+</div>

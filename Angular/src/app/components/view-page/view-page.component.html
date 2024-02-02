@@ -1,0 +1,133 @@
+
+<!-- show alert </button> -->
+<h2>View</h2>
+<!-- <button (click)="clickMe()">Click me</button> -->
+
+<label *ngIf="message">
+  <input type="checkbox" class="alertCheckbox" autocomplete="off" />
+  <div class="alert {{messageType}}">
+    <span class="alertClose">X</span>
+    <span class="alertText"> {{message}}
+      <br class="clear" /></span>
+  </div>
+</label>
+<!-- 
+<button (click)="diag()">move</button> -->
+
+<div class="view-menu">
+  <mat-spinner *ngIf="viewModuleList.length == 0 && loading" color="primary"></mat-spinner>
+  <mat-slide-toggle (change)="toggleOnchange($event, 'all')" (click)="$event.stopPropagation()"
+    *ngIf="viewModuleList.length > 0" [checked]="visible" style="margin-bottom: 10px;" [disabled]="loading">
+    All
+  </mat-slide-toggle>
+  <div class="view-menu-buttons">
+    <button *ngIf="newPositionMap.size> 0 " mat-stroked-button color="warn" style="margin-right: 8px" (click)="cancel()"
+      [disabled]="loading">
+      <mat-icon *ngIf="loading" style="margin-left:4px">
+        <mat-spinner color="accent" diameter="18"> </mat-spinner>
+      </mat-icon>Cancel
+    </button>
+    <button *ngIf="newPositionMap.size> 0 " mat-stroked-button color="primary" (click)="savePositions()"
+      [disabled]="loading">
+      <mat-icon *ngIf="loading" style="margin-left:4px">
+        <mat-spinner color="primary" diameter="18"> </mat-spinner>
+      </mat-icon>
+      Save Postiton changes
+    </button>
+
+  </div>
+
+
+  <button *ngIf="mmNeedsToBeRefresh" mat-mini-fab color="primary" style="margin-bottom: 10px;margin-right:15px"
+    matTooltip="Refresh" [disabled]="loading" (click)="refresh()">
+    <mat-icon *ngIf="loading" style="margin-left:4px;margin-top:3px;">
+      <mat-spinner color="primary" diameter="20">
+      </mat-spinner>
+    </mat-icon>
+    <mat-icon *ngIf="!loading">refresh</mat-icon>
+  </button>
+</div>
+<mat-accordion class="example-headers-align" multi>
+  <!-- [collapsedHeight]="99" -->
+  <mat-expansion-panel *ngFor="let module of viewModuleList; index as idx" [expanded]="module.unRefreshed">
+    <mat-expansion-panel-header [collapsedHeight]="'auto'" [expandedHeight]="'auto'"> <!--[collapsedHeight]="'190px'"-->
+
+      <mat-panel-description>
+
+        <div style="display:block">
+          <div style="margin-top:10px;padding-left:10px;">
+            <mat-slide-toggle (change)="toggleOnchange($event, module.identifier)" (click)="$event.stopPropagation()"
+              [checked]="!module.hidden" #togg [disabled]="loading || module.lockStrings.length > 0">
+              <div [ngStyle]="{'color': module.unRefreshed ? 'red' : 'black'}">
+                {{module.name}} <ng-template [ngIf]="module.header">({{module.header}})</ng-template></div>
+            </mat-slide-toggle>
+            <mat-icon *ngIf="togg.checked" style="vertical-align: middle;margin-left:10px">visibility</mat-icon>
+            <mat-icon *ngIf="!togg.checked" style="vertical-align: middle;margin-left:10px">visibility_off</mat-icon>
+            <mat-icon *ngIf="module.lockStrings.length > 0" style="vertical-align: middle;margin-left:10px" matTooltip="Module LockString enabled">lock</mat-icon>
+
+            <span *ngIf="module.toDel" style="vertical-align: middle; display:inline-flex;margin-left:20px">
+              <mat-spinner color="primary" diameter="20">
+              </mat-spinner>
+              Deleting
+            </span>
+
+          </div>
+          <div *ngIf="phoneSize" style="padding-left:10px;padding-bottom:5px;">
+            <ng-container
+              *ngTemplateOutlet="editDeleteBtnTemplate; context:{identifier:module.identifier, index: idx, modUpdate: module.update}"></ng-container>
+          </div>
+          <div style="padding-left:10px;padding-bottom:5px;" [innerHtml]="getPosition(module)">
+          </div>
+
+        </div>
+        <div *ngIf="!phoneSize" style="vertical-align: middle;margin-left:10px; float:right">
+          <ng-container
+            *ngTemplateOutlet="editDeleteBtnTemplate; context:{identifier:module.identifier, index: idx, modUpdate: module.update}"></ng-container>
+        </div>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <div>
+      <ng-template [ngIf]="module.position !== 'invisible'" [ngIfElse]="noPos">
+        <mat-form-field>
+          <mat-label>Position </mat-label>
+          <!-- <div class="spinner-wrapper" style="margin-left:20px; margin-right:20px"><mat-spinner color="accent" diameter="25"></mat-spinner></div> -->
+          <mat-select [(value)]="module.position" (selectionChange)="onChangePosition($event, module.identifier, idx)"
+            [disabled]="loading">
+
+            <mat-option value="invisible">Invisible</mat-option>
+            <mat-option *ngFor="let pos of positionList" [value]="pos">{{pos}}</mat-option>
+
+          </mat-select>
+          <!-- <div matSuffix  style="margin-left:20px; margin-right:20px"><mat-spinner color="accent" diameter="25"></mat-spinner></div> -->
+        </mat-form-field>
+      </ng-template>
+      <ng-template #noPos>
+        <p>No Position was defined at start. Update module or config.js to add position.</p>
+      </ng-template>
+    </div>
+  </mat-expansion-panel>
+
+
+
+</mat-accordion>
+
+
+<ng-template #editDeleteBtnTemplate let-identifier="identifier" let-index="index" let-modUpdate="modUpdate">
+  
+  <button *ngIf="modUpdate" mat-icon-button (click)="updateModule(index)" matTooltip="update" [disabled]="loading"
+  style="color: #C9971C;">
+  <mat-icon>upgrade</mat-icon>
+</button>
+  <button mat-icon-button [routerLink]="['/editModule', identifier]" matTooltip="Edit" [disabled]="loading"
+    color="primary">
+    <mat-icon>edit</mat-icon>
+  </button>
+
+  <button mat-icon-button (click)="deleteModule($event, index)" matTooltip="Delete" [disabled]="loading" color="warn">
+    <mat-icon>delete</mat-icon>
+  </button>
+</ng-template>
+
+
+<!-- </div> -->

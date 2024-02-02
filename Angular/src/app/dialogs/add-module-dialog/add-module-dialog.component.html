@@ -1,0 +1,72 @@
+<h1 mat-dialog-title>{{data.name}}</h1>
+
+<label *ngIf="message">
+    <input type="checkbox" class="alertCheckbox" autocomplete="off" />
+    <div class="alert {{messageType}}">
+        <span class="alertClose">X</span>
+        <span class="alertText"> {{message}}
+            <br class="clear" /></span>
+    </div>
+</label>
+
+<mat-spinner *ngIf="!initDone" color="accent" diameter="24" style="margin-bottom:20px;margin-left:20px"> </mat-spinner>
+<form [formGroup]="addForm" (ngSubmit)="install(addForm)" *ngIf="initDone">
+    <div mat-dialog-content>
+        <p>
+            <mat-form-field>
+                <mat-label>Position</mat-label>
+                <mat-select formControlName="position" [attr.disabled]="installing">
+                    <mat-option value="invisible">Invisible</mat-option>
+                    <mat-option *ngFor="let position of positionList" [value]="position">
+                        {{position}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </p>
+        Config
+        <mat-divider style="margin-bottom:5px"></mat-divider>
+
+        <div [formGroupName]="'config'">
+            <p *ngFor="let cfgFc of configNewFieldList">
+                <mat-form-field>
+                    <mat-label>{{cfgFc}}</mat-label>
+                    <input matInput [formControlName]="cfgFc" [attr.disabled]="installing">
+                    <button matSuffix mat-icon-button color="warn" matTooltip="Delete key" (click)="deleteField(cfgFc)"
+                        [disabled]="installing">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </mat-form-field>
+            </p>
+        </div>
+        <p>
+            <mat-form-field appearance="outline">
+                <mat-label>Add new config Key</mat-label>
+                <input matInput placeholder="Entry name" type="text" [value]="keyValue"
+                    (input)="keyValue = $event.target.value;" [attr.disabled]="installing" />
+
+                <button mat-icon-button matSuffix color="primary" matTooltip="Add new key"
+                    (click)="addValue('configNewFields')" type="button" [disabled]="installing">
+                    <mat-icon>add</mat-icon>
+                </button>
+                <mat-hint *ngIf="keyInputError.length > 0" style="color:red">{{keyInputError}}</mat-hint>
+            </mat-form-field>
+        </p>
+        <div *ngIf="installProgress.length > 0" [innerHtml]="installProgress" style="overflow-y: scroll; height:150px;">
+        </div>
+    </div>
+    <div mat-dialog-actions>
+        <button *ngIf="!installSuccess" type="button" mat-button (click)="onNoClick()" color="warn"
+            [disabled]="installing">Cancel</button>
+        <!-- <button mat-button [mat-dialog-close]="data.animal" cdkFocusInitial>Ok</button> -->
+        <button *ngIf="!installSuccess" mat-raised-button cdkFocusInitial color="primary" [disabled]="installing">
+            <mat-icon *ngIf="installing" style="margin-left:4px">
+                <mat-spinner color="accent" diameter="18"> </mat-spinner>
+            </mat-icon>
+            Install
+        </button>
+        <button *ngIf="installSuccess" mat-raised-button cdkFocusInitial color="primary" type="button"
+            (click)="onInstallSuccess()">
+            Close
+        </button>
+    </div>
+</form>

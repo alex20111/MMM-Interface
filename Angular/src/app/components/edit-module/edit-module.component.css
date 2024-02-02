@@ -1,0 +1,13 @@
+.basic-container {
+    padding: 10px;
+  }
+
+  .sub-card {
+    margin-bottom:20px;
+    margin-right: 15px;
+    padding: 10px;
+  }
+
+  .card-button {
+    margin-bottom:10px;
+  }
